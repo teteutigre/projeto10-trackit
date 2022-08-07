@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { ThreeDots } from "react-loader-spinner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../imgs/logo.svg";
@@ -7,6 +8,7 @@ import logo from "../imgs/logo.svg";
 export default function Cadastro() {
   const navigate = useNavigate();
   const [block, setBlock] = useState(false);
+  const [loading, setLoading] = useState("Cadastrar");
 
   const [form, setForm] = useState({
     email: "",
@@ -24,17 +26,22 @@ export default function Cadastro() {
 
   function cadastro(event) {
     event.preventDefault();
+    setLoading(<ThreeDots color="white" />);
+    setBlock(true);
     axios
       .post(
         "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
         form
       )
       .then(() => {
-        navigate("/", {
-          state: form,
-        });
+        setLoading(<ThreeDots color="white" />);
+        navigate("/");
       })
-      .catch(alert("Conta ja registrada"));
+      .catch(() => {
+        alert("Conta ja registrada");
+        setLoading("Cadastrar");
+        setBlock(false);
+      });
   }
 
   return (
@@ -80,9 +87,9 @@ export default function Cadastro() {
           value={form.image}
           disabled={block}
         />
-        <button onClick={cadastro}>Cadastrar</button>
+        <button onClick={cadastro}>{loading}</button>
       </form>
-      <p onClick={() => navigate("/cadastro")}>Já tem uma conta? Faça login!</p>
+      <p onClick={() => navigate("/")}>Já tem uma conta? Faça login!</p>
     </Main>
   );
 }
@@ -131,7 +138,11 @@ const Main = styled.main`
 
     font-weight: 400;
     font-size: 21px;
-    text-align: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 
     margin-bottom: 25px;
 

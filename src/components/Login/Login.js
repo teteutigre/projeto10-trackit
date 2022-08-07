@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../imgs/logo.svg";
+import Context from "../Context";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setToken } = useContext(Context);
+  const { setImage } = useContext(Context);
   const [block, setBlock] = useState(false);
   const [loading, setLoading] = useState("Entrar");
   const [form, setForm] = useState({
@@ -29,12 +32,11 @@ export default function Login() {
         "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
         form
       )
-      .then((element) => {
+      .then((resposta) => {
         setBlock(true);
-        navigate("/hoje", {
-          state: element,
-        });
-        console.log(element);
+        setToken(resposta.data.token);
+        setImage(resposta.data.image);
+        navigate("/habitos");
       })
       .catch(() => {
         setBlock(true);

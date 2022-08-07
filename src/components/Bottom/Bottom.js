@@ -53,5 +53,9 @@ const Footer = styled.footer`
 
     border-radius: 50%;
     background: #52b6ff;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;

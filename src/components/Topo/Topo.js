@@ -1,12 +1,15 @@
+import React from "react";
 import logo from "../imgs/logoHeader.svg";
-import teste from "../imgs/teste.svg";
 import styled from "styled-components";
+import { useContext } from "react";
+import Context from "../Context";
 
 export default function Topo() {
+  const { image } = useContext(Context);
   return (
     <Header>
       <img src={logo} />
-      <img className="perfil" src={teste} />
+      <img className="perfil" src={image} />
     </Header>
   );
 }
