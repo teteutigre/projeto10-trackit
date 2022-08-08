@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ThreeDots } from "react-loader-spinner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import logo from "../imgs/logo.svg";
+import logo from "../../imgs/logo.svg";
 
 export default function Cadastro() {
   const navigate = useNavigate();
@@ -96,10 +96,13 @@ export default function Cadastro() {
 
 const Main = styled.main`
   width: 100%;
+  padding-bottom: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
+  background: #ffffff;
 
   form {
     display: flex;

@@ -3,8 +3,8 @@ import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import logo from "../imgs/logo.svg";
-import Context from "../Context";
+import logo from "../../imgs/logo.svg";
+import Context from "../../Context";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function Login() {
         setBlock(true);
         setToken(resposta.data.token);
         setImage(resposta.data.image);
-        navigate("/habitos");
+        navigate("/hoje");
       })
       .catch(() => {
         setBlock(true);
@@ -81,10 +81,14 @@ export default function Login() {
 
 const Main = styled.main`
   width: 100%;
+  padding-bottom: 50%;
+
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+
+  background: #ffffff;
 
   form {
     display: flex;

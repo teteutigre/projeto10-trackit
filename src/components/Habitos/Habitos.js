@@ -18,7 +18,7 @@ export default function Habitos() {
   const [loading, setLoading] = useState("Salvar");
 
   const { token } = useContext(Context);
-  const confi = {
+  const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -27,19 +27,12 @@ export default function Habitos() {
   useEffect(() => {
     const promise = axios.get(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
-      confi
+      config
     );
     promise.then((resposta) => {
       setApiHab(resposta.data);
     });
   }, []);
-
-  function handleForm(event) {
-    setForm({
-      ...form,
-      [event.target.name]: event.target.value,
-    });
-  }
 
   function save(event) {
     event.preventDefault();
@@ -51,12 +44,11 @@ export default function Habitos() {
     const promise = axios.post(
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
       body,
-      confi
+      config
     );
     promise
       .then((resposta) => {
         setLoading(<ThreeDots color="white" />);
-        apiHab([...apiHab, body]);
         setLoading("Salvar");
         setAdd(!add);
         setArrayDay([]);
@@ -71,7 +63,7 @@ export default function Habitos() {
     if (delet) {
       const promise = axios.delete(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${element}`,
-        confi
+        config
       );
       promise
         .then(() => {
@@ -83,31 +75,6 @@ export default function Habitos() {
         .catch((erro) => console.log(erro.message));
     }
   }
-
-  <div>
-    {apiHab.map((element, index) => {
-      return (
-        <HabitDel key={index}>
-          <div className="info">
-            <h2>{element.name}</h2>
-
-            <button className="delet" onClick={() => deleteHabit(element.id)}>
-              {Del}
-            </button>
-          </div>
-          <ul>
-            <Habi check={element.days.includes(0)} name={"D"} />
-            <Habi check={element.days.includes(1)} name={"S"} />
-            <Habi check={element.days.includes(2)} name={"T"} />
-            <Habi check={element.days.includes(3)} name={"Q"} />
-            <Habi check={element.days.includes(4)} name={"Q"} />
-            <Habi check={element.days.includes(5)} name={"S"} />
-            <Habi check={element.days.includes(6)} name={"S"} />
-          </ul>
-        </HabitDel>
-      );
-    })}
-  </div>;
 
   return (
     <>
@@ -125,13 +92,12 @@ export default function Habitos() {
             />{" "}
           </button>
         </div>
-
         {add && (
           <form onSubmit={save}>
             <input
               type="text"
               name="name"
-              onChange={handleForm}
+              onChange={(e) => setForm(e.target.value)}
               placeholder={"nome do hábito"}
             />
             <ul>
@@ -156,7 +122,6 @@ export default function Habitos() {
             </div>
           </form>
         )}
-
         {apiHab.length === 0 ? (
           <p className="notification">
             Você não tem nenhum hábito <br /> cadastrado ainda. Adicione um
@@ -165,6 +130,28 @@ export default function Habitos() {
         ) : (
           <></>
         )}
+        <HabitosDaSemana>
+          {apiHab.map((element, index) => {
+            return (
+              <div className="HabitDel" key={index}>
+                <div className="info">
+                  <h2>{element.name}</h2>
+
+                  <img src={Del} onClick={() => deleteHabit(element.id)} />
+                </div>
+                <ul>
+                  <Habi check={element.days.includes(0)} name={"D"} />
+                  <Habi check={element.days.includes(1)} name={"S"} />
+                  <Habi check={element.days.includes(2)} name={"T"} />
+                  <Habi check={element.days.includes(3)} name={"Q"} />
+                  <Habi check={element.days.includes(4)} name={"Q"} />
+                  <Habi check={element.days.includes(5)} name={"S"} />
+                  <Habi check={element.days.includes(6)} name={"S"} />
+                </ul>
+              </div>
+            );
+          })}
+        </HabitosDaSemana>
       </Main>
       <Bottom />
     </>
@@ -295,32 +282,48 @@ const Main = styled.main`
   }
 `;
 
-const HabitDel = styled.div`
-  margin-top: 15px;
+const HabitosDaSemana = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
-  background: #ffffff;
-  border-radius: 5px;
+  background-color: #e5e5e5;
 
-  gap: 5px;
+  .HabitDel {
+    margin-top: 15px;
 
-  width: 340px;
-  height: 91px;
+    background: #ffffff;
+    border-radius: 5px;
 
-  ul {
-    width: 300px;
+    gap: 5px;
+
+    width: 100%;
+    height: 91px;
+
+    padding: 0 10px 0 10px;
+
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 4px;
-  }
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
 
-  .info {
-    display: flex;
-    justify-content: space-between;
+    ul {
+      width: 300px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 4px;
+    }
 
-    h2 {
-      font-size: 20px;
-      color: #666666;
+    .info {
+      display: flex;
+      justify-content: space-between;
+      h2 {
+        font-size: 20px;
+        color: #666666;
+        margin-left: 2px;
+      }
     }
   }
 `;
